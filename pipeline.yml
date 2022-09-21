@@ -1,6 +1,7 @@
 steps:
-  - label: ":pipeline: Pipeline upload"
-    command: buildkite-agent pipeline upload
-
-  - label: "Example Test"
-    command: echo "Hello!"
+  - commands:
+    - "curl -s -L https://github.com/turbot/steampipe/releases/latest/download/steampipe_linux_amd64.tar.gz | tar -xzvf -"
+    - "echo installed steampipe"
+    - "git clone https://github.com/turbot/steampipe-mod-terraform-aws-compliance.git"
+    - "su buildkite -c './steampipe plugin install terraform'"
+    - "su buildkite -c 'cd terraform ;STEAMPIPE_WORKSPACE_CHDIR=steampipe-mod-terraform-aws-compliance ./steampipe check all --output html > /tmp/report.html'"
