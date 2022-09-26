@@ -1,7 +1,12 @@
 steps:
   - commands:
-    - "curl -s -L https://github.com/turbot/steampipe/releases/latest/download/steampipe_linux_amd64.tar.gz | tar -xzvf -"
+    - "curl -s -L https://github.com/turbot/steampipe/releases/download/v0.17.0-alpha.16/steampipe_linux_amd64.tar.gz | tar -xzf -"
     - "echo installed steampipe"
+    - "export STEAMPIPE_INSTALL_DIR=`pwd`/.steampipe"
     - "git clone https://github.com/turbot/steampipe-mod-terraform-aws-compliance.git"
     - "su buildkite -c './steampipe plugin install terraform'"
-    - "su buildkite -c 'cd terraform ;STEAMPIPE_WORKSPACE_CHDIR=steampipe-mod-terraform-aws-compliance ./steampipe check all --output html > /tmp/report.html'"
+    - "su buildkite -c 'cd terraform'"
+    - "ls"
+    - "pwd"
+    - "su buildkite -c './steampipe check all --snapshot'"
+    - "su buildkite -c 'cd terraform ; export STATUS_URL=`STEAMPIPE_WORKSPACE_CHDIR=/home/buildkite/steampipe-mod-terraform-aws-compliance /home/buildkite/steampipe dashboard benchmark.s3 --share=rahulsrivastav14/integrated2022 --cloud-host latestpipe.turbot.io --cloud-token spt_cclfillo4h69eos3reug_1jc3lxemyt163500nqbsvsby0`'"
