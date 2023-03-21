@@ -1,0 +1,16 @@
+tasks:
+  - name: Open README 
+    command: gp open README.md      
+  - name: Install Steampipe with RSS Plugin
+    init: |
+      sudo /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/turbot/steampipe/main/install.sh)"
+      steampipe -v
+      steampipe plugin install steampipe
+      steampipe plugin install rss
+      steampipe query "select title, published, link from rss_item where feed_link = 'https://www.hardcorehumanism.com/feed/' order by published desc;"
+    command: |
+      steampipe service status 
+      
+ports:
+ # Steampipe/ PostgreSQL
+  - port: 9193
